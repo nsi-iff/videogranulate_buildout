@@ -28,8 +28,10 @@ class VideoGranulateTest(unittest.TestCase):
         sleep(60)
 
         grains_dict = eval(self.sam.get(uid))
+#        import ipdb; ipdb.set_trace()
         self.assertTrue(isinstance(grains_dict, dict))
         self.assertEquals(len(grains_dict), 4)
+        self.assertEquals(len(grains_dict['data']['grains']), 6)
 
 if __name__ == '__main__':
         videogranulate_ctl = join(FOLDER_PATH, '..', 'bin', 'videogranulate_ctl')
