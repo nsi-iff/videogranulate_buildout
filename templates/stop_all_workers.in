@@ -1,0 +1,19 @@
+#!${buildout:bin-directory}/${celeryd:interpreter}
+
+from os.path import dirname, abspath, join
+ROOT = abspath(dirname(__file__))
+ETC = join(ROOT, '..', 'etc')
+sys.path.append(ETC)
+
+from subprocess import call
+from celery.task.control import broadcast
+
+
+def main():
+    print "Stopping all workers..."
+    broadcast("shutdown")
+    
+
+if __name__ == '__main__':
+    main()
+
