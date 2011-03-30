@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+from os.path import dirname, abspath, join
+from sys import path
+
+ROOT = abspath(dirname(__file__))
+ETC = join('ROOT','..','etc')
+path.append(ROOT)
+path.append(ETC)
+
 import cyclone.web
 from twisted.application import service, internet
 from nsivideogranulate.http import HttpHandler
