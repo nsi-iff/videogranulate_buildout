@@ -3,7 +3,7 @@
 
 import cyclone.web
 from twisted.application import service, internet
-from nsivideogranulate.xmlrpc import XmlrpcHandler
+from nsivideogranulate.http import HttpHandler
 from nsivideogranulate.auth import Authentication
 from ConfigParser import RawConfigParser
 
@@ -17,7 +17,7 @@ class VideoGranulate(cyclone.web.Application):
 
     def __init__(self):
         handlers = [
-            (r"/xmlrpc", XmlrpcHandler),
+            (r"/", HttpHandler),
         ]
 
         settings = {
