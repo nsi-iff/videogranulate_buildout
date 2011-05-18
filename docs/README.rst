@@ -3,8 +3,23 @@ VideoGranulate Buildout
 Arquitetura
 -----------
 
-Como pode ser visto no pacote "nsi.vidoegranulate" o sistema consiste em um webservice (xmlrpc) hostiado por padrão na porta 8885 na url "http://usuario:senha@localhost:8885/xmlrpc". O serviço contém uma função "granulate" que é reponsável por converter o vídeo para formato livre (utilizando o VideoConvert Buildout) e então colocar seu UID em uma fila de vídeos a serem granularizados, juntamente com o UID onde os grãos ficarão, além de retornar o último para o usuário para que ele possa saber se os grãos já foram gerados ou não.
-Então os slaves procuram por itens na fila, recuperam o vídeos, geram os grãos e guardam eles no SAM. Ao perguntar para o servidor se os grãos já estão gerados, ele verifica se há uma flag no valor correspondente á aquele UID, se não houver retorna True, caso contrário False.
+Como pode ser visto no pacote "nsi.vidoegranulate" o sistema consiste em um webservice RESTful hostiado por padrão na porta 8885
+na url "http://localhost:8885/". Ele responde aos verbos POST e GET. Cada verbo correspondendo a uma ação do serviço de granularização:
+POST para submeter um vídeo, GET para verificar o estado da granularização. Todos os verbos recebem parâmetros no formato "json",
+para melhor interoperabilidade com qualquer outra ferramenta.
+
+
+POST
+    Recebe em um parâmetro "video" o vídeo a ser granularizado codificado em base64, para evitar problemas de encoding.
+    Responde a requisição com as chaves onde estarão o vídeos e os grãos correspondentes a ele no SAM.
+    É possível enviar uma URL para receber um "callback" assim que o vídeo for convertido. Caso o parêmtro "callback"
+    seja fornecido, ao término da granularização, um dos granularizadores realizará uma requisição para tal URL com o verbo
+    POST, fornecendo no corpo dela uma chave "done" com valor verdadeiro e a chave "key", com a chave para acesso aos grãos.
+
+GET
+    Também é possível receber se os grãos de um vídeo já foram gerados fazendo uma requisição do tipo GET para o servidor,
+    passando como parâmetro "key" o valor na chave "grains_key" que é retornada pelo método POST. O retorno será uma chave
+    "done", com valor verdadeiro caso os grão estejam prontos, e falso para o contrário.
 
 Bibliotecas
 -----------
@@ -21,12 +36,26 @@ além de um cliente HTTP assíncrono.
 - nsi.videogranulate
 Pacote que contém a implementação das funções do serviço propriamente dito.
 
+- nsi.granlate
+Pacote que implementa a granularização de vídeo propriamente dita.
+
 Instalação
 ----------
 
-Assumindo que os serviços de armazenamento (SAM) e de conversão de vídeo já estão devidamente configurados e instalados, criar um ambiente python virtual (sem a opção --no-site-packages), ativá-lo e executar o "make"
+Assumindo que os serviços de armazenamento (SAM) e de conversão de vídeo já estão devidamente configurados e instalados,
+criar um ambiente python virtual (sem a opção --no-site-packages), ativá-lo e executar o "make"
 
 Executando
 ----------
-TERMINAR.
 
+Basta executar o comando *bin/videogranulate_ctl start* que o serviço já estará online para o uso. Lembrando que ele depende
+do SAM para funcionar corretamente. Para adicionar usuários ao serviço *bin/add-user.py usuario senha" e para deletar
+*bin/del-user.py usuario*.
+Para executar a interface web de testes, executar "bin/test_server_ctl start". Isso colocará um servidor web na porta 8886, na
+máquina local, com uma simples interface para envio de vídeos para o serviço.
+
+Rodando os testes
+-----------------
+
+Com o serviço de armazenamento (SAM) rodando e com o usuário "test", com senha "test", adicionado, executar o comando
+"make test". Os testes serão rodados e o resultado será mostrado na tela.
