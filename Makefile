@@ -1,6 +1,6 @@
 PYTHON=python
 
-all: clean gstreamer lxml_deps buildout nsisvgtool nsigranulate rabbitmq_deps
+all: clean gstreamer pil lxml_deps rabbitmq_deps buildout nsisvgtool nsigranulate
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
@@ -10,10 +10,13 @@ rabbitmq_auth:
 	bin/rabbitmqctl set_permissions -p myvhost test ".*" ".*" ".*"
 
 rabbitmq_deps:
-	sudo apt-get install erlang -y
+	sudo apt-get install erlang python-argparse -y
+
+pil:
+	sudo apt-get install python-imaging
 
 gstreamer:
-	sudo apt-get install python-gst0.10 gstreamer-tools -y
+	sudo apt-get install python-gst0.10 gstreamer-tools gstreamer-0.10-ffmpeg -y
 
 lxml_deps:
 	sudo apt-get install libxslt1.1 libxslt1-dev libxml2-dev python-dev -y
@@ -26,7 +29,6 @@ nsisvgtool:
 	cd nsi.svgtool-0.3 && ${PYTHON} setup.py install
 	@rm -Rf nsi.svgtool-0.3
 	@rm -rf nsi.svgtool-0.3.tar.gz
-
 
 nsigranulate:
 	@rm -Rf nsi.granulate-0.9.3
