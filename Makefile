@@ -1,6 +1,6 @@
 PYTHON=python
 
-all: clean gstreamer pil lxml_deps rabbitmq_deps buildout nsisvgtool nsigranulate
+all: clean gstreamer pil lxml_deps argparse buildout nsisvgtool nsigranulate
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
@@ -9,8 +9,8 @@ rabbitmq_auth:
 	bin/rabbitmqctl add_vhost myvhost
 	bin/rabbitmqctl set_permissions -p myvhost test ".*" ".*" ".*"
 
-rabbitmq_deps:
-	sudo apt-get install erlang python-argparse -y
+argparse:
+	sudo apt-get install python-argparse -y
 
 pil:
 	sudo apt-get install python-imaging
