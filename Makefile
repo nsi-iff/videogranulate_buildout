@@ -4,11 +4,6 @@ all: clean gstreamer pil lxml_deps argparse buildout nsisvgtool nsigranulate
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
-rabbitmq_auth:
-	bin/rabbitmqctl add_user test test
-	bin/rabbitmqctl add_vhost myvhost
-	bin/rabbitmqctl set_permissions -p myvhost test ".*" ".*" ".*"
-
 argparse:
 	sudo apt-get install python-argparse -y
 
