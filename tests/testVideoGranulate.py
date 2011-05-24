@@ -22,7 +22,7 @@ class VideoGranulateTest(unittest.TestCase):
     def testGranulate(self):
         input_video = open(join(FOLDER_PATH,'input','rubik.flv')).read()
         b64_encoded_video = b64encode(input_video)
-        response = self.video_granulate_service.post({'video':b64_encoded_video, 'format':'ogm', 'callback':'http://google.com'}).resource()
+        response = self.video_granulate_service.post({'video':b64_encoded_video, 'format':'ogm', 'callback':'http://localhost:8887/'}).resource()
         self.uid_list.append(response.grains_key)
         self.uid_list.append(response.video_key)
 
