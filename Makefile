@@ -1,6 +1,6 @@
 PYTHON=python
 
-all: clean gstreamer pil lxml_deps argparse buildout nsisvgtool nsigranulate
+all: clean gstreamer pil lxml_deps argparse buildout nsisvgtool nsigranulate restfulie
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
@@ -11,10 +11,13 @@ pil:
 	sudo apt-get install python-imaging
 
 gstreamer:
-	sudo apt-get install python-gst0.10 gstreamer-tools gstreamer-0.10-ffmpeg gnome-core -y
+	sudo apt-get install python-gst0.10 gstreamer-tools gstreamer0.10-ffmpeg gnome-core -y
 
 lxml_deps:
 	sudo apt-get install libxslt1.1 libxslt1-dev libxml2-dev python-dev -y
+
+restfulie:
+	pip install restfulie
 
 nsisvgtool:
 	@rm -Rf nsi.svgtool-0.3
