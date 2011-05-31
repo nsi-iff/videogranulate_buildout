@@ -28,7 +28,7 @@ class VideoGranulateTest(unittest.TestCase):
 
         sleep(60)
 
-        grains_response = self.sam.get({'key':response.grains_key})
+        grains_response = self.sam.get(key=response.grains_key)
         grains_dict = loads(grains_response.body)
 
         self.assertTrue(isinstance(grains_dict, dict))
