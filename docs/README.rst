@@ -3,7 +3,7 @@ VideoGranulate Buildout
 Arquitetura
 -----------
 
-Como pode ser visto no pacote "nsi.vidoegranulate" o sistema consiste em um webservice RESTful hostiado por padrão na porta 8885
+Como pode ser visto no pacote "nsi.videogranulate" o sistema consiste em um webservice RESTful hostiado por padrão na porta 8885
 na url "http://localhost:8885/". Ele responde aos verbos POST e GET. Cada verbo correspondendo a uma ação do serviço de granularização:
 POST para submeter um vídeo, GET para verificar o estado da granularização. Todos os verbos recebem parâmetros no formato "json",
 para melhor interoperabilidade com qualquer outra ferramenta.
@@ -12,7 +12,7 @@ para melhor interoperabilidade com qualquer outra ferramenta.
 POST
     Recebe em um parâmetro "video" o vídeo a ser granularizado codificado em base64, para evitar problemas de encoding.
     Responde a requisição com as chaves onde estarão o vídeos e os grãos correspondentes a ele no SAM.
-    É possível enviar uma URL para receber um "callback" assim que o vídeo for convertido. Caso o parêmtro "callback"
+    É possível enviar uma URL para receber um "callback" assim que o vídeo for granularizado. Caso o parêmtro "callback"
     seja fornecido, ao término da granularização, um dos granularizadores realizará uma requisição para tal URL com o verbo
     POST, fornecendo no corpo dela uma chave "done" com valor verdadeiro e a chave "key", com a chave para acesso aos grãos.
 
@@ -49,8 +49,12 @@ Executando
 ----------
 
 Basta executar o comando *bin/videogranulate_ctl start* que o serviço já estará online para o uso. Lembrando que ele depende
-do SAM para funcionar corretamente. Para adicionar usuários ao serviço *bin/add-user.py usuario senha" e para deletar
-*bin/del-user.py usuario*.
+do SAM o do buildout do sistema de filas para funcionar corretamente. Para adicionar usuários ao serviço
+*bin/add-user.py usuario senha" e para deletar *bin/del-user.py usuario*.
+
+Para instalar o serviço de filas basta baixar o *servicequeue_buildout* e rodar o utilitário *make* contido nele. Depois,
+basta executar o comando *bin/rabbitmq-server -detached* para ativar o serviço de filas.
+
 Para executar a interface web de testes, executar "bin/test_server_ctl start". Isso colocará um servidor web na porta 8886, na
 máquina local, com uma simples interface para envio de vídeos para o serviço.
 
