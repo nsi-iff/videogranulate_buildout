@@ -36,18 +36,23 @@ class VideoGranulateTest(unittest.TestCase):
         self.assertEquals(len(grains_dict['data']['grains']), 2)
 
 if __name__ == '__main__':
+	print "Necessario que o SAM esteja rodando na porta padrao com o usuario\n" + \
+	      "'test' e senha 'test' criados." 
         videogranulate_ctl = join(FOLDER_PATH, '..', 'bin', 'videogranulate_ctl')
         worker = join(FOLDER_PATH, '..', 'bin', 'start_worker -name test_worker')
         stop_worker = join(FOLDER_PATH, '..', 'bin', 'stop_worker test_worker')
         add_user = join(FOLDER_PATH, '..', 'bin', 'add-user.py')
         del_user = join(FOLDER_PATH, '..', 'bin', 'del-user.py')
+	callback_server = join(FOLDER_PATH, "callback_server.py")
         try:
+	    call("twistd -y %s" % callback_server, shell=True)
             call("%s start" % videogranulate_ctl, shell=True)
             call("%s test test" % add_user, shell=True)
-            call("%s" % worker, shell=True)
+#            call("%s" % worker, shell=True)
             unittest.main()
         finally:
-            call("%s" % stop_worker, shell=True)
+	    call("kill -9 `cat tests/twistd.pid`", shell=True)
+#            call("%s" % stop_worker, shell=True)
             call("%s stop" % videogranulate_ctl, shell=True)
             call("%s test" % del_user, shell=True)
 
