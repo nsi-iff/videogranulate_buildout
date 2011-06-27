@@ -3,14 +3,11 @@
 
 import unittest
 import sys
+from threading import Thread
+from subprocess import call
 from os.path import dirname, abspath, join
 from base64 import decodestring, b64encode
-from subprocess import call, Popen
-from multiprocessing import Process
-from time import sleep
 from datetime import datetime
-from functools import wraps
-from json import loads
 from restfulie import Restfulie
 
 FOLDER_PATH = abspath(dirname(__file__))
@@ -36,6 +33,8 @@ class PerformanceTest(object):
         self.threads = int(threads)
         self.videos = int(videos)
         self.videos_size = int(videos_size)
+        self.videos_over_threads = self.videos/self.threads
+        self.video_list_per_thread = []
 
     def start(self):
         self.video_list = []
@@ -43,21 +42,48 @@ class PerformanceTest(object):
 
         self.base_video = self._read_input_file()
         self.video_list = self._make_video_list()
-        self.uid_list = self._post_videos()
+        self.video_list_per_thread = self._split_video_lists()
+        print len(self.video_list_per_thread[0])
+        self.uid_list = self._start_thread_post_videos()
 
     @time_it('Read input file')
     def _read_input_file(self):
         video = open(join(FOLDER_PATH, 'input', 'rubik.flv')).read()
         return video
 
+    @time_it('Distributing the videos into equal lists')
+    def _split_video_lists(self):
+        temp_video_list = []
+        splitted_video_list = []
+        for (index, video) in enumerate(self.video_list, start=1):
+            if index % self.videos_over_threads == 0:
+                temp_video_list.append(video)
+                splitted_video_list.append(temp_video_list)
+                temp_video_list = []
+            else:
+                temp_video_list.append(video)
+        return splitted_video_list
+
     @time_it('Make the video list')
     def _make_video_list(self):
         return [b64encode(self.base_video * self.videos_size) for i in range(self.videos)]
 
-    @time_it('Send all videos to the web server')
-    def _post_videos(self):
-        video_granulate = Restfulie.at('http://localhost:8885').auth('test', 'test').as_('application/json')
-        return [video_granulate.post(video=video, format="ogm") for video in self.video_list]
+    @time_it('Start all the threads to post videos')
+    def _start_thread_post_videos(self):
+        self.threads = []
+
+        @time_it('A thread to post videos')
+        def post_videos(video_list):
+            video_granulate = Restfulie.at('http://localhost:8885').auth('test', 'test').as_('application/json')
+            video_uids = [video_granulate.post(video=video, format="ogm").resource().video_key for video in video_list]
+            return video_uids
+
+        for video_list in self.video_list_per_thread:
+            thread = Thread(target=post_videos, args=(video_list,))
+            self.threads.append(thread)
+
+        for thread in self.threads:
+            thread.start()
 
 def parse_args():
     args_number = len(sys.argv) - 1
@@ -74,20 +100,23 @@ def print_help():
     print("Devem ser passados três argumentos.\n")
     print("O primeiro representa quantos processos serão usados.\n")
     print("O segundo representa a quantidade de vídeos que serão enviados ao servidor\n")
-    print("O terceiro representa o tamanho dos vídeos enviados ao servidor.\n")
+    print("O terceiro representa o tamanho dos vídeos (em megabytes) que serão enviados ao servidor.\n")
 
 if __name__ == '__main__':
     print "Necessario que o SAM esteja rodando na porta padrao com o usuario\n" + \
           "'test' e senha 'test' criados."
-    videogranulate_ctl = join(FOLDER_PATH, '..', 'bin', 'videogranulate_ctl')
+    #videogranulate_ctl = join(FOLDER_PATH, '..', 'bin', 'videogranulate_ctl')
     add_user = join(FOLDER_PATH, '..', 'bin', 'add-user.py')
     del_user = join(FOLDER_PATH, '..', 'bin', 'del-user.py')
     try:
-        call("%s start" % videogranulate_ctl, shell=True)
+        #call("%s start" % videogranulate_ctl, shell=True)
         call("%s test test" % add_user, shell=True)
         args = parse_args()
-        PerformanceTest(**args).start()
+        test = PerformanceTest(**args)
+        test.start()
     finally:
-        call("%s stop" % videogranulate_ctl, shell=True)
+        for thread in test.threads:
+            thread.join()
+        #call("%s stop" % videogranulate_ctl, shell=True)
         call("%s test" % del_user, shell=True)
 
