@@ -35,9 +35,12 @@ class VideoGranulateTest(unittest.TestCase):
         self.assertEquals(len(grains_dict), 4)
         self.assertEquals(len(grains_dict['data']['grains']), 2)
 
+        for uid in self.uid_list:
+            self.sam.delete(key=uid)
+
 if __name__ == '__main__':
 	print "Necessario que o SAM esteja rodando na porta padrao com o usuario\n" + \
-	      "'test' e senha 'test' criados." 
+	      "'test' e senha 'test' criados."
         videogranulate_ctl = join(FOLDER_PATH, '..', 'bin', 'videogranulate_ctl')
         worker = join(FOLDER_PATH, '..', 'bin', 'start_worker -name test_worker')
         stop_worker = join(FOLDER_PATH, '..', 'bin', 'stop_worker test_worker')
