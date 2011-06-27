@@ -74,5 +74,17 @@ def print_help():
     print("O terceiro representa o tamanho dos vídeos enviados ao servidor.\n")
 
 if __name__ == '__main__':
-    args = parse_args()
-    PerformanceTest(**args).start()
+    print "Necessario que o SAM esteja rodando na porta padrao com o usuario\n" + \
+          "'test' e senha 'test' criados."
+    videogranulate_ctl = join(FOLDER_PATH, '..', 'bin', 'videogranulate_ctl')
+    add_user = join(FOLDER_PATH, '..', 'bin', 'add-user.py')
+    del_user = join(FOLDER_PATH, '..', 'bin', 'del-user.py')
+    try:
+        call("%s start" % videogranulate_ctl, shell=True)
+        call("%s test test" % add_user, shell=True)
+        args = parse_args()
+        PerformanceTest(**args).start()
+    finally:
+        call("%s stop" % videogranulate_ctl, shell=True)
+        call("%s test" % del_user, shell=True)
+
