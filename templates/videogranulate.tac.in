@@ -22,9 +22,9 @@ SAM_URL = '${sam:url}'
 SAM_USER = '${sam:user}'
 SAM_PASS = '${sam:pass}'
 
-VIDEOCONVERT_URL = '${sam:url}'
-VIDEOCONVERT_USER = '${sam:user}'
-VIDEOCONVERT_PASS = '${sam:pass}'
+VIDEOCONVERT_URL = '${videoconvert:url}'
+VIDEOCONVERT_USER = '${videoconvert:user}'
+VIDEOCONVERT_PASS = '${videoconvert:pass}'
 
 def get_authenticator(conf):
     return Authentication(DB_FILE)
