@@ -18,6 +18,14 @@ from ConfigParser import RawConfigParser
 CONF = '${conf-path}'
 DB_FILE = '${db-file}'
 
+SAM_URL = '${sam:url}'
+SAM_USER = '${sam:user}'
+SAM_PASS = '${sam:pass}'
+
+VIDEOCONVERT_URL = '${sam:url}'
+VIDEOCONVERT_USER = '${sam:user}'
+VIDEOCONVERT_PASS = '${sam:pass}'
+
 def get_authenticator(conf):
     return Authentication(DB_FILE)
 
@@ -30,6 +38,12 @@ class VideoGranulate(cyclone.web.Application):
 
         settings = {
             "auth": get_authenticator(CONF),
+            "sam_user": SAM_USER,
+            "sam_pass": SAM_PASS,
+            "sam_url": SAM_URL,
+            "videoconvert_user": VIDEOCONVERT_USER,
+            "videoconvert_pass": VIDEOCONVERT_PASS,
+            "videoconvert_url": VIDEOCONVERT_URL,
         }
 
         cyclone.web.Application.__init__(self, handlers, **settings)
