@@ -1,6 +1,6 @@
 PYTHON=python
 
-all: clean gstreamer pil lxml_deps argparse buildout nsisvgtool nsigranulate restfulie
+all: clean gstreamer pil lxml_deps argparse buildout nsisvgtool nsigranulate restfulie cyclone
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
@@ -18,6 +18,9 @@ lxml_deps:
 
 restfulie:
 	pip install restfulie
+
+cyclone:
+	pip install twisted cyclone
 
 nsisvgtool:
 	@rm -Rf nsi.svgtool-0.3
