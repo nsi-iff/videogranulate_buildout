@@ -29,13 +29,13 @@ nsisvgtool:
 	@rm -rf nsi.svgtool-0.3.tar.gz
 
 nsigranulate:
-	@rm -Rf nsi.granulate-0.9.3
-	@rm -rf nsi.granulate-0.9.3.tar.gz
-	wget http://newton.iff.edu.br/pypi/nsi.granulate-0.9.3.tar.gz
-	tar -vzxf nsi.granulate-0.9.3.tar.gz
-	cd nsi.granulate-0.9.3 && ${PYTHON} setup.py install
-	@rm -Rf nsi.granulate-0.9.3
-	@rm -rf nsi.granulate-0.9.3.tar.gz
+	@rm -Rf nsi.granulate-0.9.4
+	@rm -rf nsi.granulate-0.9.4.tar.gz
+	wget http://newton.iff.edu.br/pypi/nsi.granulate-0.9.4.tar.gz
+	tar -vzxf nsi.granulate-0.9.4.tar.gz
+	cd nsi.granulate-0.9.4 && ${PYTHON} setup.py install
+	@rm -Rf nsi.granulate-0.9.4
+	@rm -rf nsi.granulate-0.9.4.tar.gz
 
 buildout:
 	$(PYTHON) bootstrap.py
