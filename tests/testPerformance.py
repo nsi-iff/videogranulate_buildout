@@ -105,18 +105,18 @@ def print_help():
 if __name__ == '__main__':
     print "Necessario que o SAM esteja rodando na porta padrao com o usuario\n" + \
           "'test' e senha 'test' criados."
-    #videogranulate_ctl = join(FOLDER_PATH, '..', 'bin', 'videogranulate_ctl')
+    videogranulate_ctl = join(FOLDER_PATH, '..', 'bin', 'videogranulate_ctl')
     add_user = join(FOLDER_PATH, '..', 'bin', 'add-user.py')
     del_user = join(FOLDER_PATH, '..', 'bin', 'del-user.py')
+    args = parse_args()
     try:
-        #call("%s start" % videogranulate_ctl, shell=True)
+        call("%s start" % videogranulate_ctl, shell=True)
         call("%s test test" % add_user, shell=True)
-        args = parse_args()
         test = PerformanceTest(**args)
         test.start()
     finally:
         for thread in test.threads:
             thread.join()
-        #call("%s stop" % videogranulate_ctl, shell=True)
+        call("%s stop" % videogranulate_ctl, shell=True)
         call("%s test" % del_user, shell=True)
 
