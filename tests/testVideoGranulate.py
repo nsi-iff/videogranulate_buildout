@@ -51,11 +51,11 @@ if __name__ == '__main__':
 	    call("twistd -y %s" % callback_server, shell=True)
             call("%s start" % videogranulate_ctl, shell=True)
             call("%s test test" % add_user, shell=True)
-#            call("%s" % worker, shell=True)
+            call("%s" % worker, shell=True)
             unittest.main()
         finally:
 	    call("kill -9 `cat tests/twistd.pid`", shell=True)
-#            call("%s" % stop_worker, shell=True)
+            call("%s" % stop_worker, shell=True)
             call("%s stop" % videogranulate_ctl, shell=True)
             call("%s test" % del_user, shell=True)
 
