@@ -54,7 +54,7 @@ if __name__ == '__main__':
             call("%s" % worker, shell=True)
             unittest.main()
         finally:
-	    call("kill -9 `cat tests/twistd.pid`", shell=True)
+	    call("kill -9 `cat twistd.pid`", shell=True)
             call("%s" % stop_worker, shell=True)
             call("%s stop" % videogranulate_ctl, shell=True)
             call("%s test" % del_user, shell=True)
