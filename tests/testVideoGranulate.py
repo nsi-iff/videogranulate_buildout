@@ -35,6 +35,22 @@ class VideoGranulateTest(unittest.TestCase):
         self.assertEquals(len(grains_dict), 4)
         self.assertEquals(len(grains_dict['data']['grains']), 2)
 
+        # Sendind a UID with the video
+
+        video_uid = self.sam.put(value=b64_encoded_video).resource().key
+        response = self.video_granulate_service.post(video_uid=video_uid, format='ogm', callback='http://localhost:8887/').resource()
+        self.uid_list.append(response.grains_key)
+        self.uid_list.append(response.video_key)
+
+        sleep(60)
+
+        grains_response = self.sam.get(key=response.grains_key)
+        grains_dict = loads(grains_response.body)
+
+        self.assertTrue(isinstance(grains_dict, dict))
+        self.assertEquals(len(grains_dict), 4)
+        self.assertEquals(len(grains_dict['data']['grains']), 2)
+
         for uid in self.uid_list:
             self.sam.delete(key=uid)
 
