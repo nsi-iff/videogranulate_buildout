@@ -1,6 +1,6 @@
 PYTHON=python
 
-all: clean gstreamer pil lxml_deps argparse buildout nsisvgtool nsigranulate restfulie cyclone
+all: clean gstreamer pil lxml_deps argparse buildout nsisvgtool nsigranulate restfulie cyclone should-dsl
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
@@ -39,6 +39,9 @@ nsigranulate:
 	cd nsi.granulate-0.9.4 && ${PYTHON} setup.py install
 	@rm -Rf nsi.granulate-0.9.4
 	@rm -rf nsi.granulate-0.9.4.tar.gz
+
+should_dsl:
+	pip install should-dsl
 
 buildout:
 	$(PYTHON) bootstrap.py
