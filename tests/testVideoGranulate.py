@@ -20,37 +20,36 @@ class VideoGranulateTest(unittest.TestCase):
         self.sam = Restfulie.at("http://localhost:8888/").auth('test', 'test').as_('application/json')
         self.uid_list = []
 
-        input_video = open(join(FOLDER_PATH,'input','rubik.flv')).read()
+        input_video = open(join(FOLDER_PATH,'input','working_google.flv')).read()
         self.b64_encoded_video = b64encode(input_video)
 
     def testGranulate(self):
-        response = self.video_granulate_service.post(video=self.b64_encoded_video, format='ogm', callback='http://localhost:8887/').resource()
-        self.uid_list.append(video_uid)
+        response = self.video_granulate_service.post(video=self.b64_encoded_video, filename='video1.flv', callback='http://localhost:8887/').resource()
         self.uid_list.append(response.grains_key)
         self.uid_list.append(response.video_key)
 
-        sleep(60)
+        sleep(120)
 
         grains_response = self.sam.get(key=response.grains_key)
         grains_dict = loads(grains_response.body)
 
         grains_dict.keys() |should| have(4).items
-        grains_dict['data']['grains'] |should| have(2).grains
+        grains_dict['data']['grains'] |should| have(79).grains
 
     def testUidToGranulate(self):
         video_uid = self.sam.put(value=self.b64_encoded_video).resource().key
-        response = self.video_granulate_service.post(video_uid=video_uid, format='ogm', callback='http://localhost:8887/').resource()
+        response = self.video_granulate_service.post(video_uid=video_uid, filename='video2.flv', callback='http://localhost:8887/').resource()
         self.uid_list.append(video_uid)
         self.uid_list.append(response.grains_key)
         self.uid_list.append(response.video_key)
 
-        sleep(60)
+        sleep(120)
 
         grains_response = self.sam.get(key=response.grains_key)
         grains_dict = loads(grains_response.body)
 
         grains_dict.keys() |should| have(4).items
-        grains_dict['data']['grains'] |should| have(2).grains
+        grains_dict['data']['grains'] |should| have(79).grains
 
     def tearDown(self):
         for uid in self.uid_list:
