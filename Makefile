@@ -16,6 +16,9 @@ lxml_deps:
 restfulie:
 	pip install restfulie
 
+opencv:
+	sudo apt-get install libcv4 libhighgui4 python-opencv
+
 cyclone:
 	pip install twisted cyclone
 
