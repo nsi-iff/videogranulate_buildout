@@ -11,6 +11,7 @@ para melhor interoperabilidade com qualquer outra ferramenta.
 
 POST
     Recebe em um parâmetro "video" o vídeo a ser granularizado codificado em base64, para evitar problemas de encoding.
+    E um parâmetro "filename", muito importante para o armazenamento temporário e definição do codec usado para granularizar o vídeo.
     Responde a requisição com as chaves onde estarão o vídeos e os grãos correspondentes a ele no SAM.
     É possível enviar uma URL para receber um "callback" assim que o vídeo for granularizado. Caso o parêmtro "callback"
     seja fornecido, ao término da granularização, um dos granularizadores realizará uma requisição para tal URL com o verbo
@@ -36,7 +37,7 @@ além de um cliente HTTP assíncrono.
 - nsi.videogranulate
 Pacote que contém a implementação das funções do serviço propriamente dito.
 
-- nsi.granlate
+- nsi.granulate
 Pacote que implementa a granularização de vídeo propriamente dita.
 
 Instalação
