@@ -1,6 +1,8 @@
 PYTHON=python
 
-all: clean pil lxml_deps argparse buildout restfulie cyclone should-dsl
+all: clean pil lxml_deps argparse bootstrap buildout restfulie cyclone should_dsl
+dev: clean pil lxml_deps argparse bootstrap buildout_dev restfulie cyclone should_dsl
+
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
@@ -25,9 +27,14 @@ cyclone:
 should_dsl:
 	pip install should-dsl
 
-buildout:
+bootstrap:
 	$(PYTHON) bootstrap.py
+
+buildout:
 	bin/buildout -vv
+
+buildout_dev:
+	bin/buildout -vvc develop.cfg
 
 test:
 	cd tests && $(PYTHON) testVideoGranulate.py
