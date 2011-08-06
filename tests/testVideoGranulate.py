@@ -28,7 +28,7 @@ class VideoGranulateTest(unittest.TestCase):
         self.uid_list.append(response.grains_key)
         self.uid_list.append(response.video_key)
 
-        sleep(120)
+        sleep(160)
 
         grains_response = self.sam.get(key=response.grains_key)
         grains_dict = loads(grains_response.body)
@@ -43,7 +43,7 @@ class VideoGranulateTest(unittest.TestCase):
         self.uid_list.append(response.grains_key)
         self.uid_list.append(response.video_key)
 
-        sleep(120)
+        sleep(160)
 
         grains_response = self.sam.get(key=response.grains_key)
         grains_dict = loads(grains_response.body)
