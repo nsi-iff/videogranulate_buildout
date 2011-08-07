@@ -33,7 +33,7 @@ class VideoGranulateTest(unittest.TestCase):
         grains_response = self.sam.get(key=response.grains_key)
         grains_dict = loads(grains_response.body)
 
-        grains_dict.keys() |should| have(4).items
+        grains_dict.keys() |should| have(5).items
         grains_dict['data']['grains'] |should| have(79).grains
 
     def testUidToGranulate(self):
@@ -48,7 +48,7 @@ class VideoGranulateTest(unittest.TestCase):
         grains_response = self.sam.get(key=response.grains_key)
         grains_dict = loads(grains_response.body)
 
-        grains_dict.keys() |should| have(4).items
+        grains_dict.keys() |should| have(5).items
         grains_dict['data']['grains'] |should| have(79).grains
 
     def tearDown(self):
@@ -56,22 +56,22 @@ class VideoGranulateTest(unittest.TestCase):
             self.sam.delete(key=uid)
 
 if __name__ == '__main__':
-	print "Necessario que o SAM esteja rodando na porta padrao com o usuario\n" + \
-	      "'test' e senha 'test' criados."
+        print "Necessario que o SAM esteja rodando na porta padrao com o usuario\n" + \
+          "'test' e senha 'test' criados."
         videogranulate_ctl = join(FOLDER_PATH, '..', 'bin', 'videogranulate_ctl')
         worker = join(FOLDER_PATH, '..', 'bin', 'start_worker -name test_worker')
         stop_worker = join(FOLDER_PATH, '..', 'bin', 'stop_worker test_worker')
         add_user = join(FOLDER_PATH, '..', 'bin', 'add-user.py')
         del_user = join(FOLDER_PATH, '..', 'bin', 'del-user.py')
-	callback_server = join(FOLDER_PATH, "callback_server.py")
+        callback_server = join(FOLDER_PATH, "callback_server.py")
         try:
-	    call("twistd -y %s" % callback_server, shell=True)
+            call("twistd -y %s" % callback_server, shell=True)
             call("%s start" % videogranulate_ctl, shell=True)
             call("%s test test" % add_user, shell=True)
             call("%s" % worker, shell=True)
             unittest.main()
         finally:
-	    call("kill -9 `cat twistd.pid`", shell=True)
+            call("kill -9 `cat twistd.pid`", shell=True)
             call("%s" % stop_worker, shell=True)
             call("%s stop" % videogranulate_ctl, shell=True)
             call("%s test" % del_user, shell=True)
