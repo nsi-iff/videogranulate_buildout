@@ -40,11 +40,16 @@ class PerformanceTest(object):
         self.video_list = []
         self.uid_list = []
 
+        print "Sending %d videos with %d parts of 1,5mb each, using up to %d threads" % (self.videos, self.videos_size, self.threads)
         self.base_video = self._read_input_file()
         self.video_list = self._make_video_list()
         self.video_list_per_thread = self._split_video_lists()
-        print len(self.video_list_per_thread[0])
-        self.uid_list = self._start_thread_post_videos()
+        self._start_thread_post_videos()
+
+    @time_it('Delete all temporary videos')
+    def remove_videos(self):
+        for uid in self.uid_list:
+            Restfulie.at('http://localhost:8888').auth('test', 'test').as_('application/json').delete(key=uid)
 
     @time_it('Read input file')
     def _read_input_file(self):
@@ -75,8 +80,8 @@ class PerformanceTest(object):
         @time_it('A thread to post videos')
         def post_videos(video_list):
             video_granulate = Restfulie.at('http://localhost:8885').auth('test', 'test').as_('application/json')
-            video_uids = [video_granulate.post(video=video, filename="video%d.flv" % index).resource().video_key for (index, video) in enumerate(video_list)]
-            return video_uids
+            uids = [video_granulate.post(video=video, filename="video%d.flv" % index).resource().video_key for (index, video) in enumerate(video_list)]
+            self.uid_list.extend(uids)
 
         for video_list in self.video_list_per_thread:
             thread = Thread(target=post_videos, args=(video_list,))
@@ -109,6 +114,7 @@ if __name__ == '__main__':
     add_user = join(FOLDER_PATH, '..', 'bin', 'add-user.py')
     del_user = join(FOLDER_PATH, '..', 'bin', 'del-user.py')
     args = parse_args()
+    videos_uid = []
     try:
         call("%s start" % videogranulate_ctl, shell=True)
         call("%s test test" % add_user, shell=True)
@@ -116,7 +122,8 @@ if __name__ == '__main__':
         test.start()
     finally:
         for thread in test.threads:
-            thread.join()
+            thread_uids = thread.join()
+        test.remove_videos()
         call("%s stop" % videogranulate_ctl, shell=True)
         call("%s test" % del_user, shell=True)
 
