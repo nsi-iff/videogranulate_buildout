@@ -75,7 +75,7 @@ class PerformanceTest(object):
         @time_it('A thread to post videos')
         def post_videos(video_list):
             video_granulate = Restfulie.at('http://localhost:8885').auth('test', 'test').as_('application/json')
-            video_uids = [video_granulate.post(video=video, format="ogm").resource().video_key for video in video_list]
+            video_uids = [video_granulate.post(video=video, filename="video%d.flv" % index).resource().video_key for (index, video) in enumerate(video_list)]
             return video_uids
 
         for video_list in self.video_list_per_thread:
