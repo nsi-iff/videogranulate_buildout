@@ -1,10 +1,14 @@
 PYTHON=python
 
-all: clean pil lxml_deps argparse bootstrap buildout restfulie cyclone should_dsl
-dev: clean pil lxml_deps argparse bootstrap buildout_dev restfulie cyclone should_dsl
+all: clean pre_deps bootstrap buildout post_deps
+dev: clean pre_deps bootstrap buildout_dev post_deps
 
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
+
+pre_deps: pil lxml_deps argparse
+
+post_deps: restfulie cyclone should_dsl funkload
 
 argparse:
 	sudo apt-get install python-argparse -y
@@ -26,6 +30,10 @@ cyclone:
 
 should_dsl:
 	pip install should-dsl
+
+funkload:
+	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
+	pip install funkload
 
 bootstrap:
 	$(PYTHON) bootstrap.py
