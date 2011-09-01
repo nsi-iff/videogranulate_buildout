@@ -28,6 +28,7 @@ class VideoGranulateTest(unittest.TestCase):
         self.uid_list.append(response.grains_key)
         self.uid_list.append(response.video_key)
 
+	self.video_granulate_service.get(key=response.grains_key).resource() |should_not| be_done
         sleep(160)
 
         grains_response = self.sam.get(key=response.grains_key)
@@ -43,6 +44,7 @@ class VideoGranulateTest(unittest.TestCase):
         self.uid_list.append(response.grains_key)
         self.uid_list.append(response.video_key)
 
+	self.video_granulate_service.get(key=response.grains_key).resource() |should_not| be_done
         sleep(160)
 
         grains_response = self.sam.get(key=response.grains_key)
