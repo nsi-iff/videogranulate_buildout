@@ -23,7 +23,7 @@ class VideoGranulateBench(FunkLoadTestCase):
         self.uid_list = []
         self.video_file = b64encode(open(join(FOLDER_PATH, 'input', 'working_google.flv')).read())
 
-    def test_simple(self):
+    def test_granulate(self):
         server_url = self.server_url
         self.setBasicAuth('test', 'test')
 
