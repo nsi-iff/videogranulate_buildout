@@ -35,6 +35,12 @@ funkload:
 	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
 	pip install funkload
 
+load_test:
+	cd tests && fl-run-bench testFunkLoad.py VideoGranulateBench.test_granulate
+
+load_test_report:
+	cd tests && fl-build-report --html videogranulate-bench.xml -r funkload_report
+
 bootstrap:
 	$(PYTHON) bootstrap.py
 
