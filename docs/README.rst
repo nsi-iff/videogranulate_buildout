@@ -64,3 +64,13 @@ Rodando os testes
 
 Com o serviço de armazenamento (SAM) rodando e com o usuário "test", com senha "test", adicionado, executar o comando
 "make test". Os testes serão rodados e o resultado será mostrado na tela.
+
+Testes de carga
+---------------
+
+Com o serviço de armazenamento (SAM) rodando e com o usuário "test", com senha "test", levantar também o próprio serviço de
+granularização, utilizando o comando *bin/videogranulate_ctl start" e adicionar o usuário "test" com senha "test", com o comando
+*bin/add-user.py test test*. Depois disso, basta executar *make load_test* para rodar os testes de carga e "make load_test_report"
+para gerar um relatório em HTMl na pasta *tests/funkload_report*.
+
+Para alterar configurações do servidor de granularização e do teste de carga, ver arquivo *tests/VideoGranulateBench.conf*.
