@@ -36,7 +36,12 @@ funkload:
 	pip install funkload
 
 load_test:
+	bin/videogranulate_ctl start
+	bin/add-user.py test test
 	cd tests && fl-run-bench testFunkLoad.py VideoGranulateBench.test_granulate
+	cd tests && fl-build-report --html videogranulate-bench.xml -r funkload_report
+	bin/videogranulate_ctl stop
+	bin/del-user.py test
 
 load_test_report:
 	cd tests && fl-build-report --html videogranulate-bench.xml -r funkload_report
