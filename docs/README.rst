@@ -1,5 +1,20 @@
 VideoGranulate Buildout
 
+Sistema operacional
+-------------------
+
+Todos os serviços são desenvolvidos sob o sistema operacional Ubuntu Linux 10.04 32 bits e seu funcionamento só
+é garantido em tal sistema operacional.
+
+Dependências do sistema
+-----------------------
+
+Para o funcionamento do serviço, é necessário que os seguintes pacotes estejam instalados no sistema: python-dev, python-setuptools,
+python-webunit, python-docutils, gnuplot, python-imaging, python-argparse, libcv4, libhighgui4, python-opencv, libxslt1.1, libxslt1-dev,
+libxml2-dev
+
+Durante a instalação do serviço, ao executar o comando *make*, todas essas dependências serão devidamente instaladas.
+
 Arquitetura
 -----------
 
@@ -68,9 +83,8 @@ Com o serviço de armazenamento (SAM) rodando e com o usuário "test", com senha
 Testes de carga
 ---------------
 
-Com o serviço de armazenamento (SAM) rodando e com o usuário "test", com senha "test", levantar também o próprio serviço de
-granularização, utilizando o comando *bin/videogranulate_ctl start" e adicionar o usuário "test" com senha "test", com o comando
-*bin/add-user.py test test*. Depois disso, basta executar *make load_test* para rodar os testes de carga e "make load_test_report"
-para gerar um relatório em HTMl na pasta *tests/funkload_report*.
+Com o serviço de armazenamento (SAM) rodando e com o usuário "test", com senha "test", basta executar
+*make load_test* para rodar os testes de carga. Automaticamente, depois que o teste terminar, um relatório em HTMl
+será gerado na pasta *tests/funkload_report* com informações e gráficos relevantes sobre o tete.
 
 Para alterar configurações do servidor de granularização e do teste de carga, ver arquivo *tests/VideoGranulateBench.conf*.
