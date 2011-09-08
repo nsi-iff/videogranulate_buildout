@@ -6,9 +6,12 @@ dev: clean pre_deps bootstrap buildout_dev post_deps
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
-pre_deps: pil lxml_deps argparse
+pre_deps: pip pil lxml_deps argparse
 
 post_deps: restfulie cyclone should_dsl funkload
+
+pip:
+	easy_install pip
 
 argparse:
 	sudo apt-get install python-argparse -y
