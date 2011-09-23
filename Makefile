@@ -41,6 +41,9 @@ funkload:
 	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
 	pip install funkload
 
+granulate_performance:
+	cd tests && python testPerformanceVideoGranulate.py
+
 load_test:
 	bin/videogranulate_ctl start
 	bin/add-user.py test test
