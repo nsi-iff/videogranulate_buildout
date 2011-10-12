@@ -19,11 +19,22 @@ class HttpHandler(cyclone.web.RequestHandler):
             open('/tmp/not_done', 'w+').write('not done')
         self.write("Video with uid %s is %s." % (video.get('uid'), video_is_done))
 
+class FileHandler(cyclone.web.RequestHandler):
+
+    def get(self):
+        video =  open('input/working_google.flv', 'r')
+        video_data = video.read()
+        video.close()
+
+        self.write(video_data)
+        self.finish()
+
 class CallbackService(cyclone.web.Application):
 
     def __init__(self):
         handlers = [
             (r"/", HttpHandler),
+            (r"/working_google.flv", FileHandler),
         ]
 
         settings = {

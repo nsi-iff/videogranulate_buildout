@@ -56,6 +56,21 @@ class VideoGranulateTest(unittest.TestCase):
         grains_dict['data']['videos'] |should| have(80).grains
         self.video_granulate_service.get(key=response.grains_key).resource() |should| be_done
 
+    def testLinkToGranulate(self):
+        uid_download = self.video_granulate_service.post(filename='video3.flv', video_link='http://localhost:8887/working_google.flv', callback='http://localhost:8887').resource()
+        self.uid_list.append(uid_download.grains_key)
+        self.uid_list.append(uid_download.video_key)
+
+        self.video_granulate_service.get(key=uid_download.grains_key).resource() |should_not| be_done
+        sleep(160)
+
+        grains_response = self.sam.get(key=uid_download.grains_key)
+        grains_dict = loads(grains_response.body)
+
+        grains_dict.keys() |should| have(5).items
+        grains_dict['data']['images'] |should| have(80).grains
+        self.video_granulate_service.get(key=uid_download.grains_key).resource() |should| be_done
+
     def tearDown(self):
         for uid in self.uid_list:
             self.sam.delete(key=uid)
