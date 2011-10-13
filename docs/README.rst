@@ -80,6 +80,8 @@ Rodando os testes
 Com o serviço de armazenamento (SAM) rodando e com o usuário "test", com senha "test", adicionado, executar o comando
 "make test". Os testes serão rodados e o resultado será mostrado na tela.
 
+Lembrando, novamente, que para que o serivço funcione é necessário que o sistema de filas esteja funcionando e ativado.
+
 Testes de carga
 ---------------
 
