@@ -1,12 +1,12 @@
 PYTHON=python
 
-all: clean pre_deps bootstrap buildout post_deps
-dev: clean pre_deps bootstrap buildout_dev post_deps
+all: clean pre_deps bootstrap buildout post_deps test
+dev: clean pre_deps bootstrap buildout_dev post_deps test
 
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
-pre_deps: pip pil lxml_deps argparse ffmpeg
+pre_deps: pip pil lxml_deps argparse ffmpeg opencv
 
 post_deps: restfulie cyclone should_dsl funkload
 
