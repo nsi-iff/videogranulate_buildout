@@ -13,10 +13,8 @@ class HttpHandler(cyclone.web.RequestHandler):
         video_is_done = video.get('done')
         if video_is_done:
             video_status = "done"
-            open('/tmp/done', 'w+').write('done')
         else:
             video_status = "not done"
-            open('/tmp/not_done', 'w+').write('not done')
         self.write("Video with uid %s is %s." % (video.get('uid'), video_is_done))
 
 class FileHandler(cyclone.web.RequestHandler):
