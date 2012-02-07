@@ -3,7 +3,7 @@ VideoGranulate Buildout
 Sistema operacional
 -------------------
 
-Todos os serviços são desenvolvidos sob o sistema operacional Ubuntu Linux 10.04 32 bits e seu funcionamento só
+Todos os serviços são desenvolvidos sob o sistema operacional Debian 6 (Squeeze) 64 bits e seu funcionamento só
 é garantido em tal sistema operacional.
 
 Dependências do sistema
@@ -21,7 +21,8 @@ Arquitetura
 Como pode ser visto no pacote "nsi.videogranulate" o sistema consiste em um webservice RESTful hostiado por padrão na porta 8885
 na url "http://localhost:8885/". Ele responde aos verbos POST e GET. Cada verbo correspondendo a uma ação do serviço de granularização:
 POST para submeter um vídeo, GET para verificar o estado da granularização. Todos os verbos recebem parâmetros no formato "json",
-para melhor interoperabilidade com qualquer outra ferramenta.
+para melhor interoperabilidade com qualquer outra ferramenta. Para melhor entendimento da arquitetura, verificar diagrama na pasta
+*docs*.
 
 
 POST
