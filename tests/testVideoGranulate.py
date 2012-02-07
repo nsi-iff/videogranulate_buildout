@@ -29,13 +29,14 @@ class VideoGranulateTest(unittest.TestCase):
         self.uid_list.append(response.video_key)
 
         self.video_granulate_service.get(key=response.grains_key).resource() |should_not| be_done
-        sleep(160)
+        sleep(120)
 
         grains_response = self.sam.get(key=response.grains_key)
-        grains_dict = loads(grains_response.body)
+        grains_dict = loads(str(grains_response.body))
 
-        grains_dict.keys() |should| have(5).items
+        grains_dict.keys() |should| have(4).items
         grains_dict['data']['images'] |should| have(80).grains
+        grains_dict['data']['images'][0] |should| be_kind_of(dict)
         self.video_granulate_service.get(key=response.grains_key).resource() |should| be_done
 
     def testUidToGranulate(self):
@@ -46,12 +47,12 @@ class VideoGranulateTest(unittest.TestCase):
         self.uid_list.append(response.video_key)
 
         self.video_granulate_service.get(key=response.grains_key).resource() |should_not| be_done
-        sleep(160)
+        sleep(120)
 
         grains_response = self.sam.get(key=response.grains_key)
         grains_dict = loads(grains_response.body)
 
-        grains_dict.keys() |should| have(5).items
+        grains_dict.keys() |should| have(4).items
         grains_dict['data']['images'] |should| have(80).grains
         grains_dict['data']['videos'] |should| have(80).grains
         self.video_granulate_service.get(key=response.grains_key).resource() |should| be_done
@@ -62,12 +63,12 @@ class VideoGranulateTest(unittest.TestCase):
         self.uid_list.append(uid_download.video_key)
 
         self.video_granulate_service.get(key=uid_download.grains_key).resource() |should_not| be_done
-        sleep(160)
+        sleep(120)
 
         grains_response = self.sam.get(key=uid_download.grains_key)
         grains_dict = loads(grains_response.body)
 
-        grains_dict.keys() |should| have(5).items
+        grains_dict.keys() |should| have(4).items
         grains_dict['data']['images'] |should| have(80).grains
         self.video_granulate_service.get(key=uid_download.grains_key).resource() |should| be_done
 
