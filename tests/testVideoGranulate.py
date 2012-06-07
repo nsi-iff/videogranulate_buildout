@@ -25,18 +25,21 @@ class VideoGranulateTest(unittest.TestCase):
 
     def testGranulate(self):
         response = self.video_granulate_service.post(video=self.b64_encoded_video, filename='video1.flv', callback='http://localhost:8887/').resource()
-        self.uid_list.append(response.grains_key)
         self.uid_list.append(response.video_key)
 
-        self.video_granulate_service.get(key=response.grains_key).resource() |should_not| be_done
-        sleep(160)
+        self.video_granulate_service.get(key=response.video_key).resource() |should_not| be_done
+        sleep(240)
+        self.video_granulate_service.get(key=response.video_key).resource() |should| be_done
 
-        grains_response = self.sam.get(key=response.grains_key)
-        grains_dict = loads(grains_response.body)
+        grains_response = self.sam.get(key=response.video_key)
+        grains_dict = loads(grains_response.body)['data']['grains_keys']
 
-        grains_dict.keys() |should| have(5).items
-        grains_dict['data']['images'] |should| have(80).grains
-        self.video_granulate_service.get(key=response.grains_key).resource() |should| be_done
+        grains_dict.keys() |should| have(2).grains_types
+        grains_dict['images'] |should| have(80).grains
+        grains_dict['videos'] |should| have(80).grains
+
+        [self.uid_list.append(key) for key in grains_dict['images']]
+        [self.uid_list.append(key) for key in grains_dict['videos']]
 
     def testUidToGranulate(self):
         video_uid = self.sam.put(value=self.b64_encoded_video).resource().key
@@ -47,14 +50,17 @@ class VideoGranulateTest(unittest.TestCase):
 
         self.video_granulate_service.get(key=response.grains_key).resource() |should_not| be_done
         sleep(160)
+        self.video_granulate_service.get(key=response.grains_key).resource() |should| be_done
 
         grains_response = self.sam.get(key=response.grains_key)
-        grains_dict = loads(grains_response.body)
+        grains_dict = loads(grains_response.body)['data']['grains_keys']
 
-        grains_dict.keys() |should| have(5).items
-        grains_dict['data']['images'] |should| have(80).grains
-        grains_dict['data']['videos'] |should| have(80).grains
-        self.video_granulate_service.get(key=response.grains_key).resource() |should| be_done
+        grains_dict.keys() |should| have(2).grains_types
+        grains_dict['images'] |should| have(80).grains
+        grains_dict['videos'] |should| have(80).grains
+
+        [self.uid_list.append(key) for key in grains_dict['images']]
+        [self.uid_list.append(key) for key in grains_dict['videos']]
 
     def testLinkToGranulate(self):
         uid_download = self.video_granulate_service.post(filename='video3.flv', video_link='http://localhost:8887/working_google.flv', callback='http://localhost:8887').resource()
@@ -63,13 +69,17 @@ class VideoGranulateTest(unittest.TestCase):
 
         self.video_granulate_service.get(key=uid_download.grains_key).resource() |should_not| be_done
         sleep(160)
+        self.video_granulate_service.get(key=uid_download.grains_key).resource() |should| be_done
 
         grains_response = self.sam.get(key=uid_download.grains_key)
-        grains_dict = loads(grains_response.body)
+        grains_dict = loads(grains_response.body)['data']['grains_keys']
 
-        grains_dict.keys() |should| have(5).items
-        grains_dict['data']['images'] |should| have(80).grains
-        self.video_granulate_service.get(key=uid_download.grains_key).resource() |should| be_done
+        grains_dict.keys() |should| have(2).grains_types
+        grains_dict['images'] |should| have(80).grains
+        grains_dict['videos'] |should| have(80).grains
+
+        [self.uid_list.append(key) for key in grains_dict['images']]
+        [self.uid_list.append(key) for key in grains_dict['videos']]
 
     def tearDown(self):
         for uid in self.uid_list:
