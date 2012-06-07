@@ -1,35 +1,23 @@
 PYTHON=python
 
-all: clean pre_deps bootstrap buildout post_deps test
-dev: clean pre_deps bootstrap buildout_dev post_deps test
+all: clean pre_deps bootstrap buildout post_deps
+dev: clean pre_deps bootstrap buildout_dev post_deps
 
 clean:
 	rm -Rf .installed.cfg bin downloads run develop-eggs eggs log parts
 
-pre_deps: pip pil lxml_deps argparse ffmpeg opencv
+pre_deps: pip sys-deps
 
 post_deps: restfulie cyclone should_dsl funkload
 
-ffmpeg:
-	sudo apt-get install ffmpeg -y
+sys-deps:
+	sudo apt-get install ffmpeg python-imaging python-argparse python-opencv libxslt1.1 libxslt1-dev libxml2-dev python-dev python-setuptools python-webunit python-docutils gnuplot -y
 
 pip:
 	easy_install pip
 
-argparse:
-	sudo apt-get install python-argparse -y
-
-pil:
-	sudo apt-get install python-imaging
-
-lxml_deps:
-	sudo apt-get install libxslt1.1 libxslt1-dev libxml2-dev python-dev -y
-
 restfulie:
 	pip install restfulie
-
-opencv:
-	sudo apt-get install python-opencv
 
 cyclone:
 	pip install twisted cyclone
@@ -38,7 +26,6 @@ should_dsl:
 	pip install should-dsl
 
 funkload:
-	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
 	pip install funkload
 
 granulate_performance:
