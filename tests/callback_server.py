@@ -2,6 +2,8 @@ import json
 import cyclone.web
 from twisted.internet import defer
 from twisted.application import service, internet
+from os.path import dirname, abspath, join
+ROOT = abspath(dirname(__file__))
 
 class HttpHandler(cyclone.web.RequestHandler):
 
@@ -20,7 +22,7 @@ class HttpHandler(cyclone.web.RequestHandler):
 class FileHandler(cyclone.web.RequestHandler):
 
     def get(self):
-        video =  open('input/working_google.flv', 'r')
+        video =  open(join(ROOT, 'input', 'working_google.flv'), 'r')
         video_data = video.read()
         video.close()
 
