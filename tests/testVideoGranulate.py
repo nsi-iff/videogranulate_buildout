@@ -45,14 +45,13 @@ class VideoGranulateTest(unittest.TestCase):
         video_uid = self.sam.put(value=self.b64_encoded_video).resource().key
         response = self.video_granulate_service.post(video_uid=video_uid, filename='video2.flv', callback='http://localhost:8887/').resource()
         self.uid_list.append(video_uid)
-        self.uid_list.append(response.grains_key)
         self.uid_list.append(response.video_key)
 
-        self.video_granulate_service.get(key=response.grains_key).resource() |should_not| be_done
+        self.video_granulate_service.get(key=response.video_key).resource() |should_not| be_done
         sleep(160)
-        self.video_granulate_service.get(key=response.grains_key).resource() |should| be_done
+        self.video_granulate_service.get(key=response.video_key).resource() |should| be_done
 
-        grains_response = self.sam.get(key=response.grains_key)
+        grains_response = self.sam.get(key=response.video_key)
         grains_dict = loads(grains_response.body)['data']['grains_keys']
 
         grains_dict.keys() |should| have(2).grains_types
@@ -64,14 +63,13 @@ class VideoGranulateTest(unittest.TestCase):
 
     def testLinkToGranulate(self):
         uid_download = self.video_granulate_service.post(filename='video3.flv', video_link='http://localhost:8887/working_google.flv', callback='http://localhost:8887').resource()
-        self.uid_list.append(uid_download.grains_key)
         self.uid_list.append(uid_download.video_key)
 
-        self.video_granulate_service.get(key=uid_download.grains_key).resource() |should_not| be_done
+        self.video_granulate_service.get(key=uid_download.video_key).resource() |should_not| be_done
         sleep(160)
-        self.video_granulate_service.get(key=uid_download.grains_key).resource() |should| be_done
+        self.video_granulate_service.get(key=uid_download.video_key).resource() |should| be_done
 
-        grains_response = self.sam.get(key=uid_download.grains_key)
+        grains_response = self.sam.get(key=uid_download.video_key)
         grains_dict = loads(grains_response.body)['data']['grains_keys']
 
         grains_dict.keys() |should| have(2).grains_types
