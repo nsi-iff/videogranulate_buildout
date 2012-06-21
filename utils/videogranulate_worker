@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#set -x
+
+FOLDER_PATH="/home/nexedi/videogranulate_buildout"
+OPTS=""
+
+videogranulateworker_path="$FOLDER_PATH/bin"
+pid_path="$FOLDER_PATH/run"
+
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+     log_daemon_msg "Starting a VideoGranulate worker..." "videogranulate_worker1"
+     if start-stop-daemon -c nexedi --start --quiet --oknodo --pidfile $pid_path/videogranulate_worker1.pid --exec \
+        $videogranulateworker_path/start_worker -- -name videogranulate_worker1 $OPTS; then
+        log_end_msg 0
+     else
+        log_end_msg 1
+     fi
+     ;;
+
+  stop)
+     log_daemon_msg "Stoping a VideoGranulate worker..." "videogranulate_worker1"
+     if start-stop-daemon -c nexedi --stop --quiet --oknodo --pidfile $pid_path/videogranulate_worker1.pid; then
+        log_end_msg 0
+     else
+        log_end_msg 1
+     fi
+     ;;
+
+  status)
+     status_of_proc -p $pid_path/videogranulate_worker1.pid $videogranulateworker_path/celeryd videogranulate_worker1 && exit 0 || exit $?
+     ;;
+
+  *)
+    log_action_msg "Usage: /etc/init.d/videogranulate_worker {start|stop|status}"
+    exit 1
+esac
+
+exit 0

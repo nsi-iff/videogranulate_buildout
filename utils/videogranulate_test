@@ -1,0 +1,93 @@
+#!/home/nexedi/cloudooomanager_buildout/bin/python
+
+from json import loads
+from urlparse import urlsplit
+from base64 import b64encode
+from time import sleep
+
+import argparse
+from restfulie import Restfulie
+from should_dsl import should, should_not
+from should_dsl.dsl import ShouldNotSatisfied
+
+def get_args():
+    parser = argparse.ArgumentParser(description='Quickly tests a VideoGranulate a node.')
+    parser.add_argument('video_path', type=str, help='path to the video to be used in the test.')
+    parser.add_argument('scenes', type=int, help='how many scenes does the video have?')
+    parser.add_argument('host', type=str, help='the host of the desired VideoGranulate.')
+    parser.add_argument('port', type=str, help='the port of the desired VideoGranulate.')
+    parser.add_argument('user', type=str, help='the user of the desired VideoGranulate.')
+    parser.add_argument('password', type=str, help='the password of the desired VideoGranulate.')
+    return parser.parse_args()
+
+def test_videogranulate(video_path, scenes, host, port, user, password):
+    url = 'http://%s:%s/' % (host, port)
+    key = None
+    print "Testing the VideoGranulate in the url: %s" % url
+    print "With user/password: %s/%s" % (user, password)
+
+    videogranulate = Restfulie.at(url).as_('application/json').auth(user, password)
+    video64 = b64encode(open(video_path).read())
+    filename = urlsplit(video_path).path.split('/')[-1]
+    print "Filename: %s" % filename
+
+    # testing post method
+    print "Testing 'post' method..."
+    try:
+        response = videogranulate.post(video=video64, filename=filename)
+        check_response_for_common_errors(response, "Failed to send the video to VideoGranulate.")
+        key = loads(response.body)['video_key']
+    except Exception:
+        print "Couldn't connect to VideoGranulate."
+        exit(0)
+
+    sleep(120)
+    # testing get method
+    print "Testing 'get' method..."
+    try:
+        response = videogranulate.get(key=key)
+        check_response_for_common_errors(response, "Failed to check if the granularization is done.")
+        response = loads(response.body)
+        response['done'] |should| equal_to(True)
+    except ShouldNotSatisfied:
+        print 'VideoGranulate wasnt granulated.'
+        exit(0)
+    except Exception, e:
+        print "Coudn't connect to VideoGranulate."
+	print e
+        exit(0)
+
+    try:
+        response = videogranulate.get(video_key=key)
+        check_response_for_common_errors(response, "Failed to get the granularization results from VideoGranulate.")
+        response = loads(response.body)
+        response['images'] |should| have(scenes).images
+        response['videos'] |should| have(scenes).videos
+    except ShouldNotSatisfied:
+        print "Expected number of grains missmatch."
+    except Exception, e:
+        print "Couldn't connect to VideoGranulate."
+	print e
+        exit(0)
+
+    print "Ok!"
+
+def check_response_for_common_errors(response, default_error):
+    if not response.code == '200':
+        if response.code == '401':
+            print "Authencation invalid."
+            exit(0)
+        elif response.code == '400':
+            print "CloudoooManager couldn't understand the HTTP request."
+            exit(0)
+        elif response.code == '404':
+            print "CloudoooManager couldn't find the desired key in SAM."
+            exit(0)
+        else:
+            print default_error
+            exit(0)
+
+
+if __name__ == '__main__':
+    args = get_args()
+    test_videogranulate(args.video_path, args.scenes, args.host, args.port, args.user, args.password)
