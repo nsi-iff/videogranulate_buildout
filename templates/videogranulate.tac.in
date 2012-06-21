@@ -24,6 +24,8 @@ SAM_URL = '${sam:url}'
 SAM_USER = '${sam:user}'
 SAM_PASS = '${sam:pass}'
 
+TASK_QUEUE = '${task_queue}'
+
 VIDEOCONVERT_URL = '${videoconvert:url}'
 VIDEOCONVERT_USER = '${videoconvert:user}'
 VIDEOCONVERT_PASS = '${videoconvert:pass}'
@@ -46,6 +48,7 @@ class VideoGranulate(cyclone.web.Application):
             "videoconvert_user": VIDEOCONVERT_USER,
             "videoconvert_pass": VIDEOCONVERT_PASS,
             "videoconvert_url": VIDEOCONVERT_URL,
+            "task_queue": TASK_QUEUE,
         }
 
         cyclone.web.Application.__init__(self, handlers, **settings)
