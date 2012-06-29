@@ -44,7 +44,6 @@ class VideoGranulateTest(unittest.TestCase):
         video_uid = self.sam.put(value={'video':self.b64_encoded_video}).resource().key
         response = self.video_granulate_service.post(video_uid=video_uid, filename='video2.flv', callback='http://localhost:8887/').resource()
         self.uid_list.append(video_uid)
-        print video_uid
 
         self.video_granulate_service.get(key=response.video_key).resource() |should_not| be_done
         sleep(160)
