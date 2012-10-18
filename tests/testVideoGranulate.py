@@ -27,15 +27,15 @@ class VideoGranulateTest(unittest.TestCase):
         response = self.video_granulate_service.post(video=self.b64_encoded_video, filename='video1.flv', callback='http://localhost:8887/').resource()
         self.uid_list.append(response.video_key)
 
-        self.video_granulate_service.get(key=response.video_key).resource() |should_not| be_done
-        sleep(240)
-        self.video_granulate_service.get(key=response.video_key).resource() |should| be_done
+        self.video_granulate_service.get(video_key=response.video_key).resource() |should_not| be_done
+        sleep(90)
+        self.video_granulate_service.get(video_key=response.video_key).resource() |should| be_done
 
-        grains_dict = loads(self.video_granulate_service.get(video_key=response.video_key).body)
+        grains_dict = loads(self.video_granulate_service.get(video_key=response.video_key, grains=True).body)
 
-        grains_dict.keys() |should| have(2).grains_types
-        grains_dict['images'] |should| have(80).grains
-        grains_dict['videos'] |should| have(80).grains
+        grains_dict.keys() |should| have(5).grains_types
+        grains_dict['images'] |should| have(79).grains
+        grains_dict['videos'] |should| have(12).grains
 
         [self.uid_list.append(key) for key in grains_dict['images']]
         [self.uid_list.append(key) for key in grains_dict['videos']]
@@ -51,9 +51,9 @@ class VideoGranulateTest(unittest.TestCase):
 
         grains_dict = loads(self.video_granulate_service.get(video_key=video_uid).body)
 
-        grains_dict.keys() |should| have(2).grains_types
-        grains_dict['images'] |should| have(80).grains
-        grains_dict['videos'] |should| have(80).grains
+        grains_dict.keys() |should| have(5).grains_types
+        grains_dict['images'] |should| have(79).grains
+        grains_dict['videos'] |should| have(12).grains
 
         [self.uid_list.append(key) for key in grains_dict['images']]
         [self.uid_list.append(key) for key in grains_dict['videos']]
@@ -68,9 +68,9 @@ class VideoGranulateTest(unittest.TestCase):
 
         grains_dict = loads(self.video_granulate_service.get(video_key=uid_download.video_key).body)
 
-        grains_dict.keys() |should| have(2).grains_types
-        grains_dict['images'] |should| have(80).grains
-        grains_dict['videos'] |should| have(80).grains
+        grains_dict.keys() |should| have(5).grains_types
+        grains_dict['images'] |should| have(79).grains
+        grains_dict['videos'] |should| have(12).grains
 
         [self.uid_list.append(key) for key in grains_dict['images']]
         [self.uid_list.append(key) for key in grains_dict['videos']]
