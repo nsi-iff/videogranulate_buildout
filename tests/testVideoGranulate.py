@@ -36,7 +36,13 @@ class VideoGranulateTest(unittest.TestCase):
         grains_dict.keys() |should| have(5).grains_types
         grains_dict['images'] |should| have(79).grains
         grains_dict['videos'] |should| have(12).grains
+        grains_dict['thumbnails'] |should| have(12).thumbnails
+        grains_dict['converted_video'] |should_not| equal_to(None)
+        grains_dict['audio'] |should_not| equal_to(None)
 
+        self.uid_list.append(grains_dict['converted_video'])
+        self.uid_list.append(grains_dict['audio'])
+        [self.uid_list.append(key) for key in grains_dict['thumbnails']]
         [self.uid_list.append(key) for key in grains_dict['images']]
         [self.uid_list.append(key) for key in grains_dict['videos']]
 
@@ -54,7 +60,13 @@ class VideoGranulateTest(unittest.TestCase):
         grains_dict.keys() |should| have(5).grains_types
         grains_dict['images'] |should| have(79).grains
         grains_dict['videos'] |should| have(12).grains
+        grains_dict['thumbnails'] |should| have(12).thumbnails
+        grains_dict['converted_video'] |should_not| equal_to(None)
+        grains_dict['audio'] |should_not| equal_to(None)
 
+        self.uid_list.append(grains_dict['converted_video'])
+        self.uid_list.append(grains_dict['audio'])
+        [self.uid_list.append(key) for key in grains_dict['thumbnails']]
         [self.uid_list.append(key) for key in grains_dict['images']]
         [self.uid_list.append(key) for key in grains_dict['videos']]
 
@@ -71,7 +83,13 @@ class VideoGranulateTest(unittest.TestCase):
         grains_dict.keys() |should| have(5).grains_types
         grains_dict['images'] |should| have(79).grains
         grains_dict['videos'] |should| have(12).grains
+        grains_dict['thumbnails'] |should| have(12).thumbnails
+        grains_dict['converted_video'] |should_not| equal_to(None)
+        grains_dict['audio'] |should_not| equal_to(None)
 
+        self.uid_list.append(grains_dict['converted_video'])
+        self.uid_list.append(grains_dict['audio'])
+        [self.uid_list.append(key) for key in grains_dict['thumbnails']]
         [self.uid_list.append(key) for key in grains_dict['images']]
         [self.uid_list.append(key) for key in grains_dict['videos']]
 
@@ -92,11 +110,11 @@ if __name__ == '__main__':
             call("twistd -y %s" % callback_server, shell=True)
             call("%s start" % videogranulate_ctl, shell=True)
             call("%s test test" % add_user, shell=True)
-            call("%s" % worker, shell=True)
+            # call("%s" % worker, shell=True)
             unittest.main()
         finally:
             call("kill -9 `cat twistd.pid`", shell=True)
-            call("%s" % stop_worker, shell=True)
+            # call("%s" % stop_worker, shell=True)
             call("%s stop" % videogranulate_ctl, shell=True)
-            call("%s test" % del_user, shell=True)
+            call("%s te st" % del_user, shell=True)
 
