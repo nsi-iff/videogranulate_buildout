@@ -28,7 +28,7 @@ class VideoGranulateTest(unittest.TestCase):
         self.uid_list.append(response.video_key)
 
         self.video_granulate_service.get(video_key=response.video_key).resource() |should_not| be_done
-        sleep(90)
+        sleep(160)
         self.video_granulate_service.get(video_key=response.video_key).resource() |should| be_done
 
         grains_dict = loads(self.video_granulate_service.get(video_key=response.video_key, grains=True).body)
@@ -47,15 +47,15 @@ class VideoGranulateTest(unittest.TestCase):
         [self.uid_list.append(key) for key in grains_dict['videos']]
 
     def testUidToGranulate(self):
-        video_uid = self.sam.put(value={'video':self.b64_encoded_video}).resource().key
+        video_uid = self.sam.post(value={'file':self.b64_encoded_video}).resource().key
         response = self.video_granulate_service.post(video_uid=video_uid, filename='video2.flv', callback='http://localhost:8887/').resource()
         self.uid_list.append(video_uid)
 
-        self.video_granulate_service.get(key=response.video_key).resource() |should_not| be_done
+        self.video_granulate_service.get(video_key=response.video_key).resource() |should_not| be_done
         sleep(160)
-        self.video_granulate_service.get(key=response.video_key).resource() |should| be_done
+        self.video_granulate_service.get(video_key=response.video_key).resource() |should| be_done
 
-        grains_dict = loads(self.video_granulate_service.get(video_key=video_uid).body)
+        grains_dict = loads(self.video_granulate_service.get(video_key=video_uid, grains=True).body)
 
         grains_dict.keys() |should| have(5).grains_types
         grains_dict['images'] |should| have(79).grains
@@ -74,11 +74,11 @@ class VideoGranulateTest(unittest.TestCase):
         uid_download = self.video_granulate_service.post(filename='video3.flv', video_link='http://localhost:8887/working_google.flv', callback='http://localhost:8887').resource()
         self.uid_list.append(uid_download.video_key)
 
-        self.video_granulate_service.get(key=uid_download.video_key).resource() |should_not| be_done
+        self.video_granulate_service.get(video_key=uid_download.video_key).resource() |should_not| be_done
         sleep(160)
-        self.video_granulate_service.get(key=uid_download.video_key).resource() |should| be_done
+        self.video_granulate_service.get(video_key=uid_download.video_key).resource() |should| be_done
 
-        grains_dict = loads(self.video_granulate_service.get(video_key=uid_download.video_key).body)
+        grains_dict = loads(self.video_granulate_service.get(video_key=uid_download.video_key, grains=True).body)
 
         grains_dict.keys() |should| have(5).grains_types
         grains_dict['images'] |should| have(79).grains
